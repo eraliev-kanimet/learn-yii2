@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Currency $model */
 
-$this->title = 'Create Currency';
+$this->title = 'Create currency';
 $this->params['breadcrumbs'][] = ['label' => 'Currencies', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

@@ -17,15 +17,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Currency', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Currency', ['create'], ['class' => 'contrast']) ?>
     </p>
-
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'code',
             'name',
@@ -33,12 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Currency $model, $key, $index, $column) {
+                'urlCreator' => function ($action, Currency $model) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],
         ],
     ]); ?>
-
 
 </div>
