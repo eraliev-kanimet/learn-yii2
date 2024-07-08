@@ -4,18 +4,17 @@ use yii\symfonymailer\Mailer;
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
-
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'components' => [
         'request' => [
-            'cookieValidationKey' => getenv('APP_KEY', 'wjFJuJK68eVZ57z1MfTNJBe8CTTckFPS'),
+            'cookieValidationKey' => $_ENV['APP_KEY'] ?? 'wjFJuJK68eVZ57z1MfTNJBe8CTTckFPS',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -42,6 +41,13 @@ $config = [
             ],
         ],
         'db' => $db,
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'rules' => [
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+            ],
+        ],
     ],
     'params' => $params,
 ];
