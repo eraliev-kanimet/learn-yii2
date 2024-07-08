@@ -10,7 +10,7 @@ class m240708_091652_create_product_prices_table extends Migration
             'id' => $this->primaryKey(),
             'product_id' => $this->integer()->notNull(),
             'currency_id' => $this->integer()->notNull(),
-            'price' => $this->decimal(10, 2)->notNull(),
+            'value' => $this->decimal(10, 2)->notNull(),
             ...$this->timestamps(),
         ]);
 

@@ -10,6 +10,7 @@ class m240708_091622_create_currency_rates_table extends Migration
             'id' => $this->primaryKey(),
             'currency_id' => $this->integer()->notNull(),
             'rate' => $this->decimal(10, 4)->notNull(),
+            'date' => $this->date()->notNull(),
             ...$this->timestamps(),
         ]);
 
