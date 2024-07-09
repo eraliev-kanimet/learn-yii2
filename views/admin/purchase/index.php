@@ -17,28 +17,34 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Purchase', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Purchase', ['create'], ['class' => 'contrast pico-color-green-600']) ?>
     </p>
 
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             'id',
-            'product_id',
+            'product.name',
             'name',
             'phone',
             'amount',
-            //'payment_status',
-            //'created_at',
-            //'updated_at',
+            'payment_status' => [
+                'format' => 'raw',
+                'value' => fn(Purchase $model) => $model->payment_status ? 'Paid' : 'Not Paid',
+                'contentOptions' => function (Purchase $model) {
+                    return [
+                        'class' => $model->payment_status ? 'pico-color-green-600' : 'pico-color-red-600',
+                    ];
+                },
+            ],
+            'created_at',
+            'updated_at',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Purchase $model, $key, $index, $column) {
+                'urlCreator' => function ($action, Purchase $model) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
     ]); ?>

@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Currency', ['create'], ['class' => 'contrast']) ?>
+        <?= Html::a('Create Currency', ['create'], ['class' => 'contrast pico-color-green-600']) ?>
     </p>
 
     <?= GridView::widget([

@@ -14,6 +14,8 @@ use yii\web\Response;
 
 class PurchaseController extends Controller
 {
+    public $layout = 'admin';
+
     public function behaviors(): array
     {
         return array_merge(

@@ -49,7 +49,7 @@ $nav_items = [
 <main class="container">
     <?= $content ?>
 </main>
-
+<footer></footer>
 <?php $this->endBody() ?>
 </body>
 </html>

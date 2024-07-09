@@ -13,9 +13,15 @@ $currencies = Currency::find()->select(['name', 'id'])->indexBy('id')->column()
 
 <div class="currency-rate-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'fieldConfig' => [
+            'errorOptions' => [
+                'class' => 'pico-color-red-600',
+            ]
+        ],
+    ]); ?>
 
-    <?= $form->field($model, 'currency_id')->dropDownList($currencies, ['prompt'=>'Select Currency']) ?>
+    <?= $form->field($model, 'currency_id')->dropDownList($currencies, ['prompt'=>'Select currency']) ?>
 
     <?= $form->field($model, 'rate')->textInput(['maxlength' => true]) ?>
 
