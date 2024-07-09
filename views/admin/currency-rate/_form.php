@@ -1,14 +1,11 @@
 <?php
 
-use app\models\Currency;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var app\models\CurrencyRate $model */
 /** @var yii\widgets\ActiveForm $form */
-
-$currencies = Currency::find()->select(['name', 'id'])->indexBy('id')->column()
 ?>
 
 <div class="currency-rate-form">
@@ -20,8 +17,6 @@ $currencies = Currency::find()->select(['name', 'id'])->indexBy('id')->column()
             ]
         ],
     ]); ?>
-
-    <?= $form->field($model, 'currency_id')->dropDownList($currencies, ['prompt'=>'Select currency']) ?>
 
     <?= $form->field($model, 'rate')->textInput(['maxlength' => true]) ?>
 

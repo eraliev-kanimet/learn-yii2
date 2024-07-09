@@ -2,9 +2,9 @@
 
 namespace app\controllers\admin;
 
+use app\models\Currency;
 use app\models\CurrencyRate;
 use Throwable;
-use yii\data\ActiveDataProvider;
 use yii\db\Exception;
 use yii\db\StaleObjectException;
 use yii\web\Controller;
@@ -31,44 +31,21 @@ class CurrencyRateController extends Controller
         );
     }
 
-    public function actionIndex(): string
-    {
-        $dataProvider = new ActiveDataProvider([
-            'query' => CurrencyRate::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
-
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
     /**
+     * @throws Exception
      * @throws NotFoundHttpException
      */
-    public function actionView($id): string
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    public function actionCreate(): Response|string
+    public function actionCreate($currency_id): Response|string
     {
         $model = new CurrencyRate();
+        $currency = $this->findCurrency($currency_id);
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            $data = $this->request->post();
+            $data['CurrencyRate']['currency_id'] = $currency_id;
+
+            if ($model->load($data) && $model->save()) {
+                return $this->redirect(['admin/currency/view', 'id' => $currency_id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -76,6 +53,7 @@ class CurrencyRateController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'currency' => $currency,
         ]);
     }
 
@@ -88,7 +66,7 @@ class CurrencyRateController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['admin/currency/view', 'id' => $model->currency_id]);
         }
 
         return $this->render('update', [
@@ -103,9 +81,13 @@ class CurrencyRateController extends Controller
      */
     public function actionDelete($id): Response
     {
-        $this->findModel($id)->delete();
+        $rate = $this->findModel($id);
 
-        return $this->redirect(['index']);
+        $currency_id = $rate->currency_id;
+
+        $rate->delete();
+
+        return $this->redirect(['admin/currency/view', 'id' => $currency_id]);
     }
 
     /**
@@ -114,6 +96,18 @@ class CurrencyRateController extends Controller
     protected function findModel($id): ?CurrencyRate
     {
         if (($model = CurrencyRate::findOne(['id' => $id])) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * @throws NotFoundHttpException
+     */
+    protected function findCurrency($id): Currency
+    {
+        if (($model = Currency::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

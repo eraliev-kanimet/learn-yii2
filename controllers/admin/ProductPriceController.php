@@ -2,14 +2,14 @@
 
 namespace app\controllers\admin;
 
+use app\models\Product;
 use app\models\ProductPrice;
 use Throwable;
-use yii\data\ActiveDataProvider;
 use yii\db\Exception;
 use yii\db\StaleObjectException;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\web\Response;
 
 class ProductPriceController extends Controller
@@ -31,41 +31,21 @@ class ProductPriceController extends Controller
         );
     }
 
-    public function actionIndex(): string
-    {
-        $dataProvider = new ActiveDataProvider([
-            'query' => ProductPrice::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
-
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    public function actionView($id): string
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    public function actionCreate(): Response|string
+    /**
+     * @throws Exception
+     * @throws NotFoundHttpException
+     */
+    public function actionCreate($product_id): Response|string
     {
         $model = new ProductPrice();
+        $product = $this->findProduct($product_id);
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            $data = $this->request->post();
+            $data['ProductPrice']['product_id'] = $product->id;
+
+            if ($model->load($data) && $model->save()) {
+                return $this->redirect(['admin/product/view', 'id' => $model->product_id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -73,6 +53,7 @@ class ProductPriceController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'product' => $product,
         ]);
     }
 
@@ -85,7 +66,7 @@ class ProductPriceController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['admin/product/view', 'id' => $model->product_id]);
         }
 
         return $this->render('update', [
@@ -100,17 +81,33 @@ class ProductPriceController extends Controller
      */
     public function actionDelete($id): Response
     {
-        $this->findModel($id)->delete();
+        $price = $this->findModel($id);
 
-        return $this->redirect(['index']);
+        $product_id = $price->product_id;
+
+        $price->delete();
+
+        return $this->redirect(['admin/product/view', 'id' => $product_id]);
     }
 
     /**
      * @throws NotFoundHttpException
      */
-    protected function findModel($id): ?ProductPrice
+    protected function findModel($id): ProductPrice
     {
         if (($model = ProductPrice::findOne(['id' => $id])) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * @throws NotFoundHttpException
+     */
+    protected function findProduct($id): Product
+    {
+        if (($model = Product::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

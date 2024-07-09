@@ -4,8 +4,9 @@ use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var app\models\ProductPrice $model */
+/** @var app\models\Product $product */
 
-$this->title = 'Create product price';
+$this->title = 'Create price for the product: ' . $product->name;
 $this->params['breadcrumbs'][] = ['label' => 'Product Prices', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

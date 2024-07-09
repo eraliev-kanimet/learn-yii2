@@ -3,6 +3,7 @@
 namespace app\controllers\admin;
 
 use app\models\Product;
+use app\models\ProductPrice;
 use Throwable;
 use yii\data\ActiveDataProvider;
 use yii\db\Exception;
@@ -35,16 +36,6 @@ class ProductController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Product::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
         ]);
 
         return $this->render('index', [
@@ -57,8 +48,13 @@ class ProductController extends Controller
      */
     public function actionView($id): string
     {
+        $pricesDataProvider = new ActiveDataProvider([
+            'query' => ProductPrice::find()->where(['product_id' => $id]),
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'pricesDataProvider' => $pricesDataProvider,
         ]);
     }
 

@@ -1,15 +1,12 @@
 <?php
 
 use app\models\Currency;
-use app\models\Product;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var app\models\ProductPrice $model */
 /** @var yii\widgets\ActiveForm $form */
-
-$products = Product::find()->select(['name', 'id'])->indexBy('id')->column();
 
 $currencies = Currency::find()->select(['name', 'id'])->indexBy('id')->column();
 ?>
@@ -23,8 +20,6 @@ $currencies = Currency::find()->select(['name', 'id'])->indexBy('id')->column();
             ]
         ],
     ]); ?>
-
-    <?= $form->field($model, 'product_id')->dropDownList($products, ['prompt'=>'Select product']) ?>
 
     <?= $form->field($model, 'currency_id')->dropDownList($currencies, ['prompt'=>'Select currency']) ?>
 

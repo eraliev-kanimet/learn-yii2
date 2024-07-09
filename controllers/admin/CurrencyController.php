@@ -3,6 +3,7 @@
 namespace app\controllers\admin;
 
 use app\models\Currency;
+use app\models\CurrencyRate;
 use Throwable;
 use yii\data\ActiveDataProvider;
 use yii\db\Exception;
@@ -35,16 +36,6 @@ class CurrencyController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Currency::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
         ]);
 
         return $this->render('index', [
@@ -57,8 +48,13 @@ class CurrencyController extends Controller
      */
     public function actionView($id): string
     {
+        $ratesDataProvider = new ActiveDataProvider([
+            'query' => CurrencyRate::find()->where(['currency_id' => $id]),
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'ratesDataProvider' => $ratesDataProvider,
         ]);
     }
 

@@ -17,9 +17,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
 $nav_items = [
     '/admin/currency/index' => 'Currencies',
-    '/admin/currency-rate/index' => 'Currency Rates',
     '/admin/product/index' => 'Products',
-    '/admin/product-price/index' => 'Product Prices',
     '/admin/purchase/index' => 'Purchases',
 ]
 ?>
